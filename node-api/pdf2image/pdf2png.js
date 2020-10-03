@@ -19,6 +19,11 @@ const loadingTask = pdfjsLib.getDocument({
 	cMapPacked: CMAP_PACKED,
 });
 
+exports.getNrOfPages = async () => {
+	const pdfDocument = await loadingTask.promise;
+	return pdfDocument.numPages;
+}
+
 
 exports.getPageImageFromPdf = async (pageNumber) => {
 	try {
@@ -31,8 +36,6 @@ exports.getPageImageFromPdf = async (pageNumber) => {
 			viewport.width,
 			viewport.height
 		);
-		console.log(viewport.width);
-		console.log(viewport.height);
 		let renderContext = {
 			canvasContext: canvasAndContext.context,
 			viewport: viewport,
@@ -41,10 +44,14 @@ exports.getPageImageFromPdf = async (pageNumber) => {
 		await renderTask.promise
 		// Convert the canvas to an image buffer.
 
-		const imageData = canvasAndContext.context.getImageData(0, 0, viewport.width, viewport.height);
-		console.log(imageData);
-		//return imageData.data.buffer;
+		// const imageData = canvasAndContext.context.getImageData(0, 0, viewport.width, viewport.height);
+
 		return canvasAndContext.canvas.toBuffer('image/png', {compressionLevel: 0})
+		// return {
+		// 	pageNumber: pageNumber,
+		// 	buffer: canvasAndContext.canvas.toBuffer('image/png', {compressionLevel: 0}),
+		// 	err: ''
+		// }
 
 	} catch (e) {
 		console.log(e.message);

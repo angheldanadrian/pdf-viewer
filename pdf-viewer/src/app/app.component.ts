@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +7,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 })
 export class AppComponent {
 
-  constructor(private http: HttpClient){ }
-
-  ngOnInit() {
-    // console.log('me here');
-    // this.http.post('/api/authenticate', {'username' : 'roy', 'password' : 12}).toPromise()
-    //   .then((response) => {
-    //     console.log('response ', response);
-    //   })
+  constructor() {
   }
 }

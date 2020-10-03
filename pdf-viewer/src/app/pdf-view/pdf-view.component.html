@@ -1,12 +1,12 @@
 <div class="top-bar">
-  <button class="btn" id="prev-page">
+  <button (click)="previousPage()" class="btn" id="prev-page">
     <i class="fas fa-arrow-circle-left"></i> Prev Page
   </button>
-  <button class="btn" id="next-page">
+  <button (click)="nextPage()" class="btn" id="next-page">
     Next Page <i class="fas fa-arrow-circle-right"></i>
   </button>
   <span class="page-info">
-        Page <span id="page-num"></span> of <span id="page-count"></span>
+        Page <span id="page-num">{{currentPage}}</span> of <span id="page-count">{{nrPages}}</span>
       </span>
 </div>
 <canvas id="no-print" #canvas width="1224" height="1584"></canvas>

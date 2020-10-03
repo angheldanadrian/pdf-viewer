@@ -8,7 +8,7 @@ import {PdfViewComponent} from './pdf-view/pdf-view.component';
 const routes: Routes = [
   {path: 'pdf-view', component: PdfViewComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
-  {path: '', redirectTo: 'pdf-view', pathMatch: 'full'},
+  // {path: '', redirectTo: 'pdf-view', pathMatch: 'full'},
   {path: '**', component: PageNotFoundComponent}
 ];
 

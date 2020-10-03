@@ -15,5 +15,7 @@ export class PdfViewService {
 
   getPage = (id): Observable<ArrayBuffer> => this.http.get(`${this.apiUrl}/pdf/${id}`, {responseType: 'arraybuffer'});
 
-
+  getNrOfPages = (): Observable<{ status, data }> => {
+    return this.http.get<{ status, data }>(`${this.apiUrl}/pdf/nrPages`);
+  };
 }

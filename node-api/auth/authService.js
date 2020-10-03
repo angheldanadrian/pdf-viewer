@@ -1,5 +1,4 @@
-const passport = require('passport');
-
+const passport = require('./passport');
 
 exports.auth = () => {
 	return (req, res, next) => {
@@ -15,9 +14,8 @@ exports.auth = () => {
 
 
 exports.isLoggedIn = (req, res, next) => {
-	console.log('session ', req.session);
+	//console.log('session ', req.session);
 	if (req.isAuthenticated()) {
-		//console.log('user ', req.session.passport.user)
 		return next()
 	}
 	return res.status(401).json({"statusCode": 400, "message": "not authenticated"})
