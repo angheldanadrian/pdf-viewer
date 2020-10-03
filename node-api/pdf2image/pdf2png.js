@@ -25,12 +25,14 @@ exports.getPageImageFromPdf = async (pageNumber) => {
 		const pdfDocument = await loadingTask.promise;
 		const page = await pdfDocument.getPage(pageNumber)
 		// Render the page on a Node canvas with 100% scale.
-		let viewport = page.getViewport({scale: 1.0});
+		let viewport = page.getViewport({scale: 2.0});
 		let canvasFactory = new NodeCanvasFactory();
 		let canvasAndContext = canvasFactory.create(
-			viewport.width * 2,
-			viewport.height * 2
+			viewport.width,
+			viewport.height
 		);
+		console.log(viewport.width);
+		console.log(viewport.height);
 		let renderContext = {
 			canvasContext: canvasAndContext.context,
 			viewport: viewport,

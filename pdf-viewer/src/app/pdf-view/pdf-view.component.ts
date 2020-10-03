@@ -8,22 +8,44 @@ import {PdfViewService} from './pdf-view.service';
 })
 export class PdfViewComponent implements OnInit, AfterViewInit {
 
+  constructor(private pdfViewService: PdfViewService) {
+  }
+
   @ViewChild('canvas', {static: true})
   canvas: ElementRef<HTMLCanvasElement>;
-
   private ctx: CanvasRenderingContext2D;
 
   file: Blob;
 
-
-  constructor(private pdfViewService: PdfViewService) {
-  }
 
   ngAfterViewInit(): void {
     this.ctx = this.canvas.nativeElement.getContext('2d');
   }
 
   ngOnInit(): void {
+    this.disableCanvasContextMenu(this.canvas);
+    this.disableKeyBindings();
+    this.initializeViewer();
+
+  }
+
+  disableKeyBindings(): void {
+    document.body.addEventListener('keydown', event => {
+      if (event.ctrlKey && 'as'.indexOf(event.key) !== -1) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+  }
+
+  disableCanvasContextMenu = (canvas) => {
+    canvas.nativeElement.oncontextmenu = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+  }
+
+  initializeViewer = () => {
     this.pdfViewService.getPage(2)
       .subscribe(async (img: ArrayBuffer) => {
         this.file = new Blob([img], {type: 'image/png'});

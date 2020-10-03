@@ -1,15 +1,16 @@
-<span>
-  <button>previous</button>
-  <button>next</button>
-</span>
-
-<!--<img src="imageBuffer"/>-->
-
-<!--<img [src]="imageToShow"-->
-
-<canvas #canvas width="1224" height="1584"></canvas>
-<!--<canvas #canvasEl width=612 height=792></canvas>-->
-
+<div class="top-bar">
+  <button class="btn" id="prev-page">
+    <i class="fas fa-arrow-circle-left"></i> Prev Page
+  </button>
+  <button class="btn" id="next-page">
+    Next Page <i class="fas fa-arrow-circle-right"></i>
+  </button>
+  <span class="page-info">
+        Page <span id="page-num"></span> of <span id="page-count"></span>
+      </span>
+</div>
+<canvas id="no-print" #canvas width="1224" height="1584"></canvas>
+<p hidden id="print">Printing is not allowed!</p>
 
 
 
