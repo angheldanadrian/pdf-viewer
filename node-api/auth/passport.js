@@ -1,7 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
-
 passport.use(new LocalStrategy(
 	function (username, password, done) {
 		if (username === "admin" && password === "admin") {
@@ -12,9 +11,11 @@ passport.use(new LocalStrategy(
 	}
 ));
 
+
 passport.serializeUser(function (user, done) {
 	if (user) done(null, user);
 });
+
 
 passport.deserializeUser(function (id, done) {
 	done(null, id);

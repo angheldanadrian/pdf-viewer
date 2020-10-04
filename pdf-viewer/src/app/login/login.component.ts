@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 
@@ -7,25 +7,21 @@ import {Router} from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
-  userEmail: String;
-  userPassword: String;
+  userEmail: string;
+  userPassword: string;
 
   constructor(private authService: AuthService, private router: Router) {
   }
 
-  ngOnInit() {
-
-  }
-
-  login() {
+  login = (): void => {
     this.authService.validate(this.userEmail, this.userPassword)
-      .then((response) => {
-        this.authService.setUserInfo({'user': response['user']});
+      .then((response: { user }) => {
+        this.authService.setUserInfo({user: response.user});
         this.router.navigate(['pdf-view']);
 
       });
-  }
+  };
 
 }

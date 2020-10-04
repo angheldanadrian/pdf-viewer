@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {environment} from '../environments/environment';
 
 
 @Injectable({
@@ -7,21 +8,21 @@ import {HttpClient} from '@angular/common/http';
 })
 export class AuthService {
 
-  loggedInUserInfo: {};
+  private apiUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient) {
   }
 
-  public isAuthenticated(): boolean {
+  isAuthenticated = (): boolean => {
     const userData = localStorage.getItem('userInfo');
     return !!(userData && JSON.parse(userData));
   }
 
-  public setUserInfo(user) {
+  setUserInfo = (user): void => {
     localStorage.setItem('userInfo', JSON.stringify(user));
   }
 
-  public validate(email, password) {
-    return this.http.post('/api/authenticate', {'username': email, 'password': password}).toPromise();
+  validate = (email, password): any => {
+    return this.http.post(`${this.apiUrl}/authenticate`, {username: email, password}).toPromise();
   }
 }

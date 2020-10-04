@@ -18,6 +18,7 @@ exports.getPage = async (req, res, next) => {
 	}
 }
 
+
 exports.getNrPages = async (req, res) => {
 	try {
 		const nrPages = await pdf2png.getNrOfPages();
