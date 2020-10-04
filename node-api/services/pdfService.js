@@ -1,6 +1,6 @@
 const fs = require("fs");
 const pdfjsLib = require("pdfjs-dist/es5/build/pdf.js");
-const NodeCanvasFactory = require('../canvas/canvasService')
+const NodeCanvasFactory = require('./canvasService')
 
 
 // Some PDFs need external cmaps.
@@ -29,7 +29,6 @@ exports.getPageImageFromPdf = async (pageNumber) => {
 	try {
 		const pdfDocument = await loadingTask.promise;
 		const page = await pdfDocument.getPage(pageNumber)
-		// Render the page on a Node canvas with 100% scale.
 		let viewport = page.getViewport({scale: 2.0});
 		let canvasFactory = new NodeCanvasFactory();
 		let canvasAndContext = canvasFactory.create(
@@ -42,16 +41,7 @@ exports.getPageImageFromPdf = async (pageNumber) => {
 		};
 		let renderTask = page.render(renderContext);
 		await renderTask.promise
-		// Convert the canvas to an image buffer.
-
-		// const imageData = canvasAndContext.context.getImageData(0, 0, viewport.width, viewport.height);
-
 		return canvasAndContext.canvas.toBuffer('image/png', {compressionLevel: 0})
-		// return {
-		// 	pageNumber: pageNumber,
-		// 	buffer: canvasAndContext.canvas.toBuffer('image/png', {compressionLevel: 0}),
-		// 	err: ''
-		// }
 
 	} catch (e) {
 		console.log(e.message);

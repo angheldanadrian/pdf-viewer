@@ -1,11 +1,18 @@
-const pdf2png = require('../pdf2image/pdf2png');
+const pdf2png = require('../services/pdfService');
+const watermarkService = require("../services/watermarkService");
 
-exports.getPage = async (req, res) => {
+exports.getPage = async (req, res, next) => {
 	const pageNumber = parseInt(req.params.pageNumber);
 	console.log(pageNumber);
 	try {
-		const result = await pdf2png.getPageImageFromPdf(pageNumber);
-		return res.status(200).send(result);
+		const imageBuffer = await pdf2png.getPageImageFromPdf(pageNumber);
+		if (imageBuffer) {
+			const text = 'Doc.ID 123-456789 – john.doe@somedomain. Redistribution/printing not permitted.'
+			const watermarkedImage = await watermarkService.addWatermark(imageBuffer, text)
+			const watermarkedImageBuffer = await watermarkedImage.getBufferAsync('image/png');
+			return res.status(200).send(watermarkedImageBuffer);
+		}
+		res.status(200).send(imageBuffer)
 	} catch (e) {
 		return res.status(400).json({status: 400, message: e.message});
 	}

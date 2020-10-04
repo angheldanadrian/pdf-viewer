@@ -21,7 +21,9 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.ctx = this.canvas.nativeElement.getContext('2d');
+    this.ctx.font = '50px serif';
   }
+
 
   ngOnInit(): void {
     this.disableCanvasContextMenu(this.canvas);
@@ -31,61 +33,6 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
   }
 
 
-  /* previousPage = (): void => {
-     if (this.currentPage >= 1) {
-       this.pdfViewService.getPage(this.currentPage - 1)
-         .subscribe(async (img: ArrayBuffer) => {
-           this.currentPage--;
-           this.file = new Blob([img], {type: 'image/png'});
-           const imageBitmap = await createImageBitmap(this.file, {resizeQuality: 'high'});
-           this.ctx.drawImage(imageBitmap, 0, 0);
-         });
-     }
-   };
-
-
-   nextPage = (): void => {
-     if (this.currentPage <= this.nrPages) {
-       this.pdfViewService.getPage(this.currentPage + 1)
-         .subscribe(async (img: ArrayBuffer) => {
-           this.currentPage++;
-           this.file = new Blob([img], {type: 'image/png'});
-           const imageBitmap = await createImageBitmap(this.file, {resizeQuality: 'high'});
-           this.ctx.drawImage(imageBitmap, 0, 0);
-         });
-     }
-   };
- */
-  renderPage = async (imgData: ArrayBuffer): Promise<void> => {
-    try {
-      this.file = new Blob([imgData], {type: 'image/png'});
-      const imageBitmap = await createImageBitmap(this.file, {resizeQuality: 'high'});
-      this.ctx.drawImage(imageBitmap, 0, 0);
-
-    } catch (e) {
-
-    }
-  };
-
-
-  nextPage = (): void => {
-    if (this.currentPage < this.nrPages) {
-      this.pdfViewService.getPage(this.currentPage + 1)
-        .subscribe(imgData => {
-          this.renderPage(imgData).then(r => this.currentPage++);
-        });
-    }
-  };
-
-  previousPage = (): void => {
-    if (this.currentPage > 1) {
-      this.pdfViewService.getPage(this.currentPage - 1)
-        .subscribe(imgData => {
-          this.renderPage(imgData).then(r => this.currentPage--);
-        });
-    }
-  };
-
   disableKeyBindings = (): void => {
     document.body.addEventListener('keydown', event => {
       if (event.ctrlKey && 'as'.indexOf(event.key) !== -1) {
@@ -93,14 +40,25 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
         event.stopPropagation();
       }
     });
-  };
+  }
+
 
   disableCanvasContextMenu = (canvas): void => {
     canvas.nativeElement.oncontextmenu = (e) => {
       e.preventDefault();
       e.stopPropagation();
     };
-  };
+  }
+
+
+  initPageNumbers = (): void => {
+    this.pdfViewService.getNrOfPages().subscribe(
+      nrPages => {
+        this.nrPages = nrPages.data;
+      });
+    this.currentPage = 1;
+  }
+
 
   initViewer = (): void => {
     this.initPageNumbers();
@@ -110,15 +68,49 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
         const imageBitmap = await createImageBitmap(this.file, {resizeQuality: 'high'});
         this.ctx.drawImage(imageBitmap, 0, 0);
       });
-  };
+  }
 
-  initPageNumbers = (): void => {
-    this.pdfViewService.getNrOfPages().subscribe(
-      nrPages => {
-        this.nrPages = nrPages.data;
-      });
-    this.currentPage = 1;
-  };
+
+  renderPage = async (imgData: ArrayBuffer): Promise<void> => {
+    try {
+      this.file = new Blob([imgData], {type: 'image/png'});
+      if (this.file.size === 0) {
+        this.handleEmptyPage();
+      } else {
+        const imageBitmap = await createImageBitmap(this.file, {resizeQuality: 'high'});
+        this.ctx.drawImage(imageBitmap, 0, 0);
+      }
+    } catch (e) {
+      this.handleEmptyPage();
+    }
+  }
+
+
+  handleEmptyPage = (): void => {
+    this.ctx.clearRect(0, 0, 1224, 1584);
+    this.ctx.fillText('PDF page could not be retrieved', 50, 100);
+  }
+
+
+  nextPage = (): void => {
+    if (this.currentPage < this.nrPages) {
+      this.pdfViewService.getPage(this.currentPage + 1)
+        .subscribe(imgData => {
+          this.renderPage(imgData).then(r => this.currentPage++);
+        });
+    }
+  }
+
+
+  previousPage = (): void => {
+    if (this.currentPage > 1) {
+      this.pdfViewService.getPage(this.currentPage - 1)
+        .subscribe(imgData => {
+          this.renderPage(imgData).then(r => this.currentPage--);
+        });
+    }
+  }
+
 
 }
 

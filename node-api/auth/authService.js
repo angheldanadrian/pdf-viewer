@@ -14,7 +14,6 @@ exports.auth = () => {
 
 
 exports.isLoggedIn = (req, res, next) => {
-	//console.log('session ', req.session);
 	if (req.isAuthenticated()) {
 		return next()
 	}
