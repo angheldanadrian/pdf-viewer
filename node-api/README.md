@@ -1,2 +1,2 @@
-# pdf-viewer-node : npm install + - ng serve
-# pdf-node-api: npm install + node app.js
+# Node-api : npm install + - ng serve
+# PDF-viewer: npm install + node app.js
