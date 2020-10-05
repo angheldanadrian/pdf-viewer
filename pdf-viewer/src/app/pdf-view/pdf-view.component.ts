@@ -96,7 +96,7 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
     if (this.currentPage < this.nrPages) {
       this.pdfViewService.getPage(this.currentPage + 1)
         .subscribe(imgData => {
-          this.renderPage(imgData).then(r => this.currentPage++);
+          this.renderPage(imgData).then(() => this.currentPage++);
         });
     }
   }
@@ -106,7 +106,7 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
     if (this.currentPage > 1) {
       this.pdfViewService.getPage(this.currentPage - 1)
         .subscribe(imgData => {
-          this.renderPage(imgData).then(r => this.currentPage--);
+          this.renderPage(imgData).then(() => this.currentPage--);
         });
     }
   }

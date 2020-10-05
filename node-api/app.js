@@ -7,10 +7,25 @@ const app = new express();
 const authService = require('./auth/authService');
 const passport = require('./auth/passport');
 
-app.use(session({secret: 'anything', resave: true, saveUninitialized: true}));
++app.use(session({secret: 'thisIsSecretValue'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
+
+
+app.use(function (req, res, next) {
+	res.header('Access-Control-Allow-Credentials', true);
+	res.header('Access-Control-Allow-Origin', req.headers.origin);
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+	res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+	if ('OPTIONS' == req.method) {
+		res.send(200);
+	} else {
+		next();
+	}
+
+})
+
 
 let whitelist = ['http://localhost:4200'];
 app.use(cors({

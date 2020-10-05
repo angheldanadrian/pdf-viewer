@@ -1,7 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 require('dotenv').config()
-
+const {findByUsername} = require("./user");
 
 passport.use(new LocalStrategy(
 	function (username, password, done) {
@@ -16,12 +16,16 @@ passport.use(new LocalStrategy(
 
 
 passport.serializeUser(function (user, done) {
+	done(null, user);
 	if (user) done(null, user);
 });
 
 
 passport.deserializeUser(function (id, done) {
-	done(null, id);
-});
+		console.log("userDEs=",id);
+		findByUsername(id, function(err, user) {
+				done(err, user);
+			});
+})
 
 module.exports = passport;
