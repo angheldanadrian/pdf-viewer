@@ -7,3 +7,4 @@ exports.addWatermark = async (buffer, text) => {
 	image.print(font, 10, 700, text);
 	return image;
 }
+

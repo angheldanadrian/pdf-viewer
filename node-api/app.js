@@ -1,17 +1,16 @@
+require('dotenv').config()
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const app = new express();
 const authService = require('./auth/authService');
 const passport = require('./auth/passport');
-const cors = require('cors');
-
-const app = new express();
 
 app.use(session({secret: 'anything', resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.json());
-
 
 let whitelist = ['http://localhost:4200'];
 app.use(cors({
@@ -30,14 +29,11 @@ app.post('/authenticate', authService.auth(), (req, res) => {
 	res.status(200).json({"statusCode": 200, "user": req.user});
 });
 
-
 const pdf = require('./routes/pdf');
-app.use('/pdf', pdf);
+app.use('/pdf', authService.isLoggedIn, pdf);
 
-
-app.listen(3000, () => {
-	console.log('cors enabled listening on 3000')
+app.listen(process.env.PORT, () => {
+	console.log(`cors enabled-server listening on: ${process.env.PORT} - proxy listening on 4200`)
 })
-
 
 module.exports = app;

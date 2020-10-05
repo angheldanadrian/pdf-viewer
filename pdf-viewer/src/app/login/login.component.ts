@@ -17,11 +17,10 @@ export class LoginComponent {
 
   login = (): void => {
     this.authService.validate(this.userEmail, this.userPassword)
-      .then((response: { user }) => {
+      .then((response) => {
         this.authService.setUserInfo({user: response.user});
         this.router.navigate(['pdf-view']);
-
       });
-  };
+  }
 
 }

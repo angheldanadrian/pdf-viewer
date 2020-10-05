@@ -3,7 +3,7 @@ const watermarkService = require("../services/watermarkService");
 
 exports.getPage = async (req, res, next) => {
 	const pageNumber = parseInt(req.params.pageNumber);
-	console.log(pageNumber);
+	console.log(`requestedPage: ${pageNumber}`);
 	try {
 		const imageBuffer = await pdf2png.getPageImageFromPdf(pageNumber);
 		if (imageBuffer) {
@@ -12,7 +12,7 @@ exports.getPage = async (req, res, next) => {
 			const watermarkedImageBuffer = await watermarkedImage.getBufferAsync('image/png');
 			return res.status(200).send(watermarkedImageBuffer);
 		}
-		res.status(200).send(imageBuffer)
+		res.status(200).send([]);
 	} catch (e) {
 		return res.status(400).json({status: 400, message: e.message});
 	}
