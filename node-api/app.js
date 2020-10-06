@@ -26,7 +26,6 @@ app.use(function (req, res, next) {
 
 })
 
-
 let whitelist = ['http://localhost:4200'];
 app.use(cors({
 	origin: function (origin, callback) {
@@ -39,7 +38,6 @@ app.use(cors({
 	}
 }));
 
-
 app.post('/authenticate', authService.auth(), (req, res) => {
 	res.status(200).json({"statusCode": 200, "user": req.user});
 });
@@ -48,7 +46,7 @@ const pdf = require('./routes/pdf');
 app.use('/pdf', authService.isLoggedIn, pdf);
 
 app.listen(process.env.PORT, () => {
-	console.log(`cors enabled-server listening on: ${process.env.PORT} - proxy listening on 4200`)
+	console.log(`cors enabled-server listening on: ${process.env.PORT}`)
 })
 
 module.exports = app;

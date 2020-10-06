@@ -2,6 +2,9 @@ const fs = require("fs");
 const pdfjsLib = require("pdfjs-dist/es5/build/pdf.js");
 const NodeCanvasFactory = require('./canvasService');
 const fetch = require('node-fetch');
+const NodeCache = require('node-cache');
+
+const myCache = new NodeCache();
 
 
 const CMAP_URL = "../../../node_modules/pdfjs-dist/cmaps/";
@@ -36,6 +39,8 @@ const download = async (url) => {
 	return await response.buffer();
 }
 
+
+
 exports.getNrOfPages = async () => {
 	//const pdfDocument = await fileSystemLoadingTask.promise;
 	let pdfDocument = await initializeDocument();
@@ -66,7 +71,4 @@ exports.getPageImageFromPdf = async (pageNumber) => {
 	}
 
 }
-
-
-
 

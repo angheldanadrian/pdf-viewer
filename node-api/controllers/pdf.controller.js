@@ -3,14 +3,11 @@ const watermarkService = require("../services/watermarkService");
 
 exports.getPage = async (req, res, next) => {
 	const pageNumber = parseInt(req.params.pageNumber);
-	console.log(`requestedPage: ${pageNumber}`);
 	try {
 		const imageBuffer = await pdf2png.getPageImageFromPdf(pageNumber);
 		if (imageBuffer) {
-			const text = 'Doc.ID 123-456789 – john.doe@somedomain. Redistribution/printing not permitted.'
-			const watermarkedImage = await watermarkService.addWatermark(imageBuffer, text)
-			const watermarkedImageBuffer = await watermarkedImage.getBufferAsync('image/png');
-			return res.status(200).send(watermarkedImageBuffer);
+			let watermarkedBuffer = await watermarkService.getWatermarkedBuffer(imageBuffer)
+			return res.status(200).send(watermarkedBuffer);
 		}
 		res.status(200).send([]);
 	} catch (e) {
